@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jornada do Conhecimento</title>
+    <title>Voo Vocacional</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/136/136724.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -27,13 +28,13 @@
             position: relative;
         }
         .main-container {
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgb(255, 255, 255);
             backdrop-filter: blur(10px);
             border-radius: 1.5rem;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
             padding: 2.5rem;
             width: 95%;
-            max-width: 800px;
+            
             text-align: center;
             transition: all 0.5s ease-in-out;
             position: relative;
@@ -80,8 +81,9 @@
             align-items: center;
             flex-direction: column;
         }
-        .quiz-section, .courses-section, .choose-course-section, .mini-quiz-section {
+        .quiz-section, .courses-section, .choose-course-section, .mini-quiz-section, .memory-game-section, .rock-paper-scissors-section, .tictactoe-section {
             display: none;
+            height: 95%;
         }
         .question-card {
             background-color: rgba(255, 255, 255, 0.98);
@@ -494,6 +496,127 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
+
+        /* Estilos do Jogo da Memória */
+        .memory-game-section .main-container {
+            max-width: 600px;
+        }
+
+        .memory-game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            perspective: 1000px;
+            
+        }
+
+        .memory-card {
+            width: 85px;
+            height: 85px;
+            position: relative;
+            transform: scale(1);
+            transform-style: preserve-3d;
+            transition: transform .5s;
+            cursor: pointer;
+            border-radius: 1rem;
+        }
+
+        .memory-card:active {
+            transform: scale(0.97);
+            transition: transform .2s;
+        }
+
+        .memory-card.flip {
+            transform: rotateY(180deg);
+        }
+
+        .front-face,
+        .back-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border-radius: 1rem;
+            border: 2px solid #00a8d4;
+        }
+
+        .front-face {
+            transform: rotateY(180deg);
+            background-color: #f0faff;
+            color: #00a8d4;
+        }
+        
+        .back-face {
+            background-color: #00a8d4;
+            color: #ffffff;
+            font-family: caixaalta;
+            font-size: 2rem;
+        }
+        
+        /* Estilos do Jokenpô (Pedra, Papel, Tesoura) */
+        .rock-paper-scissors-section .main-container {
+            max-width: 600px;
+        }
+        .jokenpo-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .jokenpo-btn {
+            font-size: 3rem;
+            padding: 20px;
+            background-color: #f0faff;
+            border: 2px solid #00a8d4;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .jokenpo-btn:hover {
+            transform: scale(1.1);
+        }
+        .jokenpo-result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Estilos do Jogo da Velha (Tic Tac Toe) */
+        .tictactoe-section .main-container {
+            max-width: 400px;
+            min-height: fit-content;
+        }
+        .tictactoe-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .tictactoe-cell {
+            width: 100px;
+            height: 100px;
+            background-color: #f0faff;
+            border: 2px solid #00a8d4;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .tictactoe-cell:hover {
+            background-color: #d4eaf7;
+        }
+        .tictactoe-status {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -505,11 +628,11 @@
     <i id="audio-button" class="fas fa-volume-up audio-button"></i>
 
     <div id="start-screen" class="screen flex-col items-center p-6">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-8 text-center rainbow-title">Teste Vocacional</h1>
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-8 text-center rainbow-title">Voo Vocacional</h1>
         <div class="main-container">
             <h2 class="text-2xl font-bold mb-4 text-gray-700">Bem-vindo à Fatec!</h2>
             <p class="text-lg mb-12 font-light text-gray-500">
-                Este quiz irá te auxiliar a encontrar um curso que combine com você ou testar sua compatibilidade com um algum curso que você já pensa em fazer!
+                Este teste vocacional irá te auxiliar a encontrar um curso que combine com você ou testar sua compatibilidade com um algum curso que você já pensa em fazer!
             </p>
             <div id="botoesinicio" class="flex gap-4 justify-center flex-wrap">
                 <button id="start-button" class="start-btn">
@@ -554,11 +677,62 @@
                 </div>
         </div>
     </div>
-    
+
+    <div id="memory-game-screen" class="screen memory-game-section">
+        <i id="back-button-icon-memory" class="fas fa-arrow-left back-button-icon"></i>
+        <div class="main-container">
+            <h2 class="text-3xl font-bold mb-4 text-gray-700">Jogo da Memória</h2>
+            <p class="text-md mb-8 text-gray-500">
+                Encontre os pares para desbloquear a próxima fase!
+            </p>
+            <div id="memory-game-grid" class="memory-game-grid"></div>
+        </div>
+    </div>
+
+    <div id="rock-paper-scissors-screen" class="screen rock-paper-scissors-section">
+        <i id="back-button-icon-jokenpo" class="fas fa-arrow-left back-button-icon"></i>
+        <div class="main-container">
+            <h2 class="text-3xl font-bold mb-4 text-gray-700">Pedra, Papel e Tesoura</h2>
+            <p class="text-md mb-4 text-gray-500">
+                Vença o computador 3 vezes para continuar o quiz!
+            </p>
+            <div class="jokenpo-options">
+                <button id="jokenpo-rock" class="jokenpo-btn">&#x1F44A;</button>
+                <button id="jokenpo-paper" class="jokenpo-btn">&#x1F590;</button>
+                <button id="jokenpo-scissors" class="jokenpo-btn">&#x270C;</button>
+            </div>
+            <p id="jokenpo-result" class="jokenpo-result"></p>
+            <p id="jokenpo-score" class="mt-4 font-semibold text-lg"></p>
+        </div>
+    </div>
+
+    <div id="tictactoe-screen" class="screen tictactoe-section">
+        <i id="back-button-icon-tictactoe" class="fas fa-arrow-left back-button-icon"></i>
+        <div class="main-container">
+            <h2 class="text-3xl font-bold mb-4 text-gray-700">Jogo da Velha</h2>
+            <p class="text-md mb-4 text-gray-500">
+                Vença a Fatec para desbloquear a próxima pergunta!
+            </p>
+            <div id="tictactoe-grid" class="tictactoe-grid">
+                <div class="tictactoe-cell" data-cell-index="0"></div>
+                <div class="tictactoe-cell" data-cell-index="1"></div>
+                <div class="tictactoe-cell" data-cell-index="2"></div>
+                <div class="tictactoe-cell" data-cell-index="3"></div>
+                <div class="tictactoe-cell" data-cell-index="4"></div>
+                <div class="tictactoe-cell" data-cell-index="5"></div>
+                <div class="tictactoe-cell" data-cell-index="6"></div>
+                <div class="tictactoe-cell" data-cell-index="7"></div>
+                <div class="tictactoe-cell" data-cell-index="8"></div>
+            </div>
+            <p id="tictactoe-status" class="tictactoe-status"></p>
+            <button id="tictactoe-restart" class="submit-btn mt-4 hidden">Recomeçar</button>
+        </div>
+    </div>
+
     <div id="mini-quiz-screen" class="screen mini-quiz-section relative flex-col items-center justify-center w-full">
         <i id="back-button-icon-mini-quiz" class="fas fa-arrow-left back-button-icon"></i>
         <div id="mini-quiz-progress-bar" class="progress-bar">
-            <div id="mini-quiz-progress-bar-fill" class="mini-quiz-progress-bar-fill" style="width: 0%;"></div>
+            <div id="mini-quiz-progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
         </div>
         <div id="mini-quiz-card" class="main-container question-card">
             <div class="dialogue-box">
@@ -640,6 +814,9 @@
     const backButtonIconCourses = document.getElementById('back-button-icon-courses');
     const backButtonIconChoose = document.getElementById('back-button-icon-choose');
     const backButtonIconMiniQuiz = document.getElementById('back-button-icon-mini-quiz');
+    const backButtonIconMemory = document.getElementById('back-button-icon-memory');
+    const backButtonIconJokenpo = document.getElementById('back-button-icon-jokenpo');
+    const backButtonIconTictactoe = document.getElementById('back-button-icon-tictactoe');
     const restartButton = document.getElementById('restart-button');
     const questionText = document.getElementById('question-text');
     const dynamicContent = document.getElementById('dynamic-content');
@@ -662,6 +839,21 @@
     const miniQuizResultText = document.getElementById('mini-quiz-result-text');
     const miniQuizPercentage = document.getElementById('mini-quiz-percentage');
     const restartMiniQuizBtn = document.getElementById('restart-mini-quiz-btn');
+
+    // Elementos dos Mini-jogos
+    const memoryGameScreen = document.getElementById('memory-game-screen');
+    const memoryGameGrid = document.getElementById('memory-game-grid');
+
+    const rockPaperScissorsScreen = document.getElementById('rock-paper-scissors-screen');
+    const jokenpoResult = document.getElementById('jokenpo-result');
+    const jokenpoScore = document.getElementById('jokenpo-score');
+    const jokenpoButtons = document.querySelectorAll('.jokenpo-btn');
+
+    const tictactoeScreen = document.getElementById('tictactoe-screen');
+    const tictactoeGrid = document.getElementById('tictactoe-grid');
+    const tictactoeStatus = document.getElementById('tictactoe-status');
+    const tictactoeRestartBtn = document.getElementById('tictactoe-restart');
+
     
     let affinityChartInstance = null;
     let miniQuizChartInstance = null;
@@ -672,7 +864,35 @@
     let miniQuizScore = 0;
     let selectedMiniQuizCourse = '';
     
+    // Variáveis dos Mini-jogos
+    // Memória
+    let hasFlippedCard = false;
+    let lockBoard = false;
+    let firstCard, secondCard;
+    let matchedPairsCount = 0;
+    const totalPairs = 8;
+    
+    // Jokenpô
+    let jokenpoWins = 0;
+    const jokenpoTargetWins = 3;
+
+    // Jogo da Velha
+    let tictactoeBoard = ['', '', '', '', '', '', '', '', ''];
+    let tictactoePlayer = 'X';
+    let tictactoeGameActive = true;
+    const tictactoeWinningConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
+
+
     const questionColors = ['question-color-1', 'question-color-2', 'question-color-3', 'question-color-4', 'question-color-5'];
+    
+    // Ordem dos minigames antes das perguntas
+    const miniGamesSequence = ['memory', 'jokenpo', 'tictactoe'];
+    let currentMiniGameIndex = 0;
+
 
     const courses = {
         'Administração': {
@@ -834,66 +1054,78 @@
     // Mini Quiz Questions
     const miniQuizQuestionsData = {
         'Administração': [
-            { question: "Você se vê mais como um líder de equipe ou um membro especializado?", options: [{ text: "Líder de equipe", points: 2 }, { text: "Membro especializado", points: 1 }] },
-            { question: "Em um projeto, você prefere planejar e gerenciar o orçamento ou executar as tarefas?", options: [{ text: "Planejar e gerenciar", points: 2 }, { text: "Executar as tarefas", points: 1 }] },
-            { question: "Quando surge um problema, você busca soluções estratégicas a longo prazo?", options: [{ text: "Sim", points: 2 }, { text: "Não", points: 1 }] },
-            { question: "Você gosta de analisar dados e relatórios para tomar decisões?", options: [{ text: "Sim", points: 2 }, { text: "Não", points: 1 }] }
+            { question: "Em um RPG, seu personagem ideal seria o:", options: [{ text: "Comandante que gerencia o time e os recursos.", points: 2 }, { text: "Guerreiro que foca em lutar, deixando a gestão para outros.", points: 1 }] },
+            { question: "Em uma reunião de trabalho, você prefere:", options: [{ text: "Criar a pauta e garantir que os objetivos sejam cumpridos.", points: 2 }, { text: "Participar ativamente, mas sem a responsabilidade de liderar.", points: 1 }] },
+            { question: "Qual desafio te anima mais?", options: [{ text: "Desenvolver um plano de negócios para uma startup inovadora.", points: 2 }, { text: "Criar um design de logo para um novo produto.", points: 1 }] },
+            { question: "Você é mais propenso a se envolver com:", options: [{ text: "Gestão de projetos e otimização de fluxos de trabalho.", points: 2 }, { text: "Criação de conteúdo e campanhas publicitárias.", points: 1 }] }
         ],
         'Comércio Exterior': [
-            { question: "Você tem curiosidade sobre a cultura e economia de outros países?", options: [{ text: "Sim, muita!", points: 2 }, { text: "Não tanto", points: 1 }] },
-            { question: "Você se sente confortável negociando com pessoas de diferentes backgrounds?", options: [{ text: "Sim, totalmente", points: 2 }, { text: "Não muito", points: 1 }] },
-            { question: "Qual a sua visão sobre a globalização?", options: [{ text: "É uma oportunidade incrível", points: 2 }, { text: "É um desafio complexo", points: 1 }] },
-            { question: "Em um projeto de logística, você se preocupa mais com a rapidez ou com a segurança da entrega internacional?", options: [{ text: "Rapidez", points: 1 }, { text: "Segurança", points: 2 }] }
+            { question: "Se você pudesse ter um superpoder, qual seria?", options: [{ text: "O poder de falar qualquer idioma para se comunicar com o mundo.", points: 2 }, { text: "O poder de construir qualquer coisa com a mente.", points: 1 }] },
+            { question: "Você se sente mais atraído por:", options: [{ text: "Notícias sobre economia global e relações internacionais.", points: 2 }, { text: "Tendências de tecnologia e novos gadgets.", points: 1 }] },
+            { question: "Em uma negociação, você é o tipo de pessoa que:", options: [{ text: "Busca o melhor acordo para ambas as partes.", points: 2 }, { text: "Prefere que outra pessoa conduza a negociação.", points: 1 }] },
+            { question: "Você prefere:", options: [{ text: "Planejar uma viagem internacional com todos os detalhes de logística.", points: 2 }, { text: "Improvisar a viagem e descobrir lugares na hora.", points: 1 }] }
         ],
         'Cuidados de Idosos': [
-            { question: "Você tem paciência e gosta de ouvir histórias de vida?", options: [{ text: "Sim, adoro!", points: 2 }, { text: "Não muito", points: 1 }] },
-            { question: "Você se sente à vontade para ajudar outras pessoas com tarefas diárias?", options: [{ text: "Sim, sem problemas", points: 2 }, { text: "Não", points: 1 }] },
-            { question: "A empatia é uma característica que você valoriza em si mesmo?", options: [{ text: "Sim, com certeza", points: 2 }, { text: "Não é minha maior força", points: 1 }] },
-            { question: "Você se sente bem em ambientes que exigem calma e dedicação?", options: [{ text: "Sim, prefiro assim", points: 2 }, { text: "Não, prefiro mais agitação", points: 1 }] }
+            { question: "Quando alguém precisa de ajuda, sua primeira reação é:", options: [{ text: "Oferecer-se para ajudar de forma prática e emocional.", points: 2 }, { text: "Indicar alguém que possa ajudar.", points: 1 }] },
+            { question: "Qual atividade de lazer te agrada mais?", options: [{ text: "Participar de um grupo de voluntariado na sua comunidade.", points: 2 }, { text: "Assistir a um filme de ação com alta adrenalina.", points: 1 }] },
+            { question: "Qual a sua maior qualidade em um ambiente de grupo?", options: [{ text: "Empatia e capacidade de ouvir.", points: 2 }, { text: "Eficiência e foco em resultados.", points: 1 }] },
+            { question: "Você se sentiria mais realizado em uma carreira que envolve:", options: [{ text: "Promover o bem-estar e a qualidade de vida de outras pessoas.", points: 2 }, { text: "Desenvolver um novo produto tecnológico.", points: 1 }] }
         ],
         'Desenvolvimento de Sistemas': [
-            { question: "Você gosta de resolver quebra-cabeças e desafios de lógica?", options: [{ text: "Sim, é divertido", points: 2 }, { text: "Não muito", points: 1 }] },
-            { question: "Quando algo não funciona na internet, você tem vontade de entender o porquê?", options: [{ text: "Sim, sempre", points: 2 }, { text: "Não, só uso", points: 1 }] },
-            { question: "Você se vê mais criando o 'motor' de um site ou o design visual?", options: [{ text: "O motor (lógica)", points: 2 }, { text: "O design visual", points: 1 }] },
-            { question: "Você se considera uma pessoa que busca otimizar processos e automatizar tarefas?", options: [{ text: "Sim, com certeza", points: 2 }, { text: "Não, faço o que precisa ser feito", points: 1 }] }
+            { question: "Qual jogo te desafia mais?", options: [{ text: "Um jogo de lógica e programação, como Zachtronics.", points: 2 }, { text: "Um jogo de estratégia em tempo real, como Age of Empires.", points: 1 }] },
+            { question: "Quando você usa um aplicativo, você pensa mais sobre:", options: [{ text: "Como o código por trás dele foi escrito para funcionar tão bem.", points: 2 }, { text: "O quão bonito e intuitivo é o design da interface.", points: 1 }] },
+            { question: "Qual a sua reação a um bug de software?", options: [{ text: "Fico obcecado até encontrar e consertar o problema.", points: 2 }, { text: "Fico frustrado e espero que a atualização resolva.", points: 1 }] },
+            { question: "Você prefere criar o 'motor' de um site ou o design visual?", options: [{ text: "O motor (lógica)", points: 2 }, { text: "O design visual", points: 1 }] }
         ],
         'Informática para Internet': [
-            { question: "Você se importa com a estética visual de um site ou aplicativo?", options: [{ text: "Sim, muito!", points: 2 }, { text: "Não é uma prioridade", points: 1 }] },
-            { question: "Você prefere criar interfaces de usuário ou mexer com bancos de dados?", options: [{ text: "Interfaces de usuário", points: 2 }, { text: "Bancos de dados", points: 1 }] },
-            { question: "O que mais te atrai: a funcionalidade ou o design de um site?", options: [{ text: "Design", points: 2 }, { text: "Funcionalidade", points: 1 }] },
-            { question: "Você gosta de acompanhar tendências de design e novas tecnologias web?", options: [{ text: "Sim, sempre", points: 2 }, { text: "Não muito", points: 1 }] }
+            { question: "Ao visitar um novo site, o que mais te chama a atenção?", options: [{ text: "A beleza e a usabilidade do design da página.", points: 2 }, { text: "A rapidez com que as páginas carregam.", points: 1 }] },
+            { question: "Você prefere:", options: [{ text: "Aprender a criar animações e interfaces interativas para a web.", points: 2 }, { text: "Estudar sobre servidores e segurança de dados.", points: 1 }] },
+            { question: "Qual habilidade te parece mais interessante?", options: [{ text: "Criar um portfólio online com projetos visuais incríveis.", points: 2 }, { text: "Gerenciar um banco de dados complexo.", points: 1 }] },
+            { question: "Em um projeto web, você se vê mais como o:", options: [{ text: "Artista que desenha a experiência do usuário.", points: 2 }, { text: "Engenheiro que constrói a estrutura por trás.", points: 1 }] }
         ],
         'Logística': [
-            { question: "Você é uma pessoa organizada e metódica em suas tarefas?", options: [{ text: "Sim, sou bem organizado(a)", points: 2 }, { text: "Não muito", points: 1 }] },
-            { question: "Você gosta de planejar rotas e otimizar processos para economizar tempo e recursos?", options: [{ text: "Sim, é satisfatório", points: 2 }, { text: "Não, acho chato", points: 1 }] },
-            { question: "Em um grupo, você é o que se preocupa com o cronograma e a entrega no prazo?", options: [{ text: "Sim, sempre", points: 2 }, { text: "Não, confio no grupo", points: 1 }] },
-            { question: "Você presta atenção aos detalhes e possíveis problemas em uma operação?", options: [{ text: "Sim, sou bem detalhista", points: 2 }, { text: "Não, vejo o quadro geral", points: 1 }] }
+            { question: "Ao arrumar uma estante de livros, você:", options: [{ text: "Planeja a melhor forma de otimizar o espaço para caber mais itens.", points: 2 }, { text: "Coloca os livros onde couberem sem um plano prévio.", points: 1 }] },
+            { question: "Você é o tipo de amigo que:", options: [{ text: "Sempre organiza o roteiro e os detalhes das viagens em grupo.", points: 2 }, { text: "Sempre está pronto para a aventura, mas sem se preocupar com a organização.", points: 1 }] },
+            { question: "Qual cenário te gera mais satisfação?", options: [{ text: "Ver um sistema complexo funcionando de forma fluida e eficiente.", points: 2 }, { text: "Concluir uma tarefa criativa de forma brilhante.", points: 1 }] },
+            { question: "Em um jogo de estratégia, você prefere focar em:", options: [{ text: "Gerenciar a cadeia de suprimentos e as rotas de transporte.", points: 2 }, { text: "Liderar as tropas em combate direto.", points: 1 }] }
         ],
         'Marketing': [
-            { question: "Você gosta de criar e compartilhar conteúdo em redes sociais?", options: [{ text: "Sim, adoro!", points: 2 }, { text: "Não muito", points: 1 }] },
-            { question: "Acha divertido analisar o comportamento das pessoas e o que as motiva a comprar algo?", options: [{ text: "Sim, é fascinante", points: 2 }, { text: "Não, não me interesso", points: 1 }] },
-            { question: "Você é uma pessoa criativa e gosta de pensar em novas ideias?", options: [{ text: "Sim, sou bastante criativo", points: 2 }, { text: "Não tanto", points: 1 }] },
-            { question: "Seu trabalho ideal envolve comunicação constante e interação com o público?", options: [{ text: "Sim, é o que busco", points: 2 }, { text: "Não, prefiro algo mais reservado", points: 1 }] }
+            { question: "Você se considera um bom contador de histórias?", options: [{ text: "Sim, adoro criar narrativas para engajar as pessoas.", points: 2 }, { text: "Não, prefiro ir direto ao ponto.", points: 1 }] },
+            { question: "Quando você gosta de um produto, sua primeira atitude é:", options: [{ text: "Falar sobre ele para todos os seus amigos e redes sociais.", points: 2 }, { text: "Apenas usá-lo e aproveitar.", points: 1 }] },
+            { question: "O que mais te atrai?", options: [{ text: "Entender o que faz um vídeo ou meme viralizar na internet.", points: 2 }, { text: "Descobrir como os eletrodomésticos funcionam.", points: 1 }] },
+            { question: "Sua habilidade em redes sociais é mais voltada para:", options: [{ text: "Criar conteúdo e interagir com seguidores.", points: 2 }, { text: "Consumir conteúdo e se informar.", points: 1 }] }
         ],
         'Recursos Humanos': [
-            { question: "Você se considera um bom ouvinte e mediador de conflitos?", options: [{ text: "Sim, as pessoas me procuram para desabafar", points: 2 }, { text: "Não, prefiro me manter distante de conflitos", points: 1 }] },
-            { question: "Você acredita que o bem-estar dos funcionários é essencial para o sucesso de uma empresa?", options: [{ text: "Sim, totalmente", points: 2 }, { text: "Não é a coisa mais importante", points: 1 }] },
-            { question: "O que mais te atrai: recrutamento e seleção de talentos ou organização de benefícios?", options: [{ text: "Recrutamento", points: 2 }, { text: "Organização de benefícios", points: 1 }] },
-            { question: "Você se sente confortável em dar feedback e orientar outras pessoas?", options: [{ text: "Sim, sem problemas", points: 2 }, { text: "Não, me sinto desconfortável", points: 1 }] }
+            { question: "Seu papel favorito em um grupo de trabalho é:", options: [{ text: "Resolver os problemas e garantir que todos se sintam bem.", points: 2 }, { text: "Focar apenas na sua parte da tarefa.", points: 1 }] },
+            { question: "Qual habilidade você mais valoriza em uma pessoa?", options: [{ text: "Inteligência emocional e boa comunicação.", points: 2 }, { text: "Conhecimento técnico e eficiência.", points: 1 }] },
+            { question: "O que te motiva mais em uma carreira?", options: [{ text: "Ajudar no desenvolvimento profissional e pessoal de outras pessoas.", points: 2 }, { text: "Trabalhar em um campo com alta demanda de tecnologia.", points: 1 }] },
+            { question: "Você é mais propenso a se envolver com:", options: [{ text: "Conversas sobre sentimentos e motivações das pessoas.", points: 2 }, { text: "Discussões sobre a lógica e a eficiência de um sistema.", points: 1 }] }
         ],
         'Segurança do Trabalho': [
-            { question: "Você é uma pessoa atenta aos detalhes e preocupada com a segurança?", options: [{ text: "Sim, sou bastante cuidadoso(a)", points: 2 }, { text: "Não, sou mais relaxado(a)", points: 1 }] },
-            { question: "Você se interessa por normas, regras e legislação?", options: [{ text: "Sim, acho importante", points: 2 }, { text: "Não, acho entediante", points: 1 }] },
-            { question: "Você prefere prevenir um problema ou resolvê-lo depois que ele acontece?", options: [{ text: "Prevenir", points: 2 }, { text: "Resolver depois", points: 1 }] },
-            { question: "Você se vê como um 'guardião' que garante um ambiente de trabalho seguro para todos?", options: [{ text: "Sim, com certeza", points: 2 }, { text: "Não", points: 1 }] }
+            { question: "Ao ver um amigo prestes a fazer algo arriscado, sua reação é:", options: [{ text: "Alertá-lo sobre o perigo e tentar convencê-lo a parar.", points: 2 }, { text: "Deixar que ele decida por si mesmo.", points: 1 }] },
+            { question: "Qual a sua visão sobre regras e normas?", options: [{ text: "Elas são essenciais para manter a ordem e a segurança.", points: 2 }, { text: "Elas são um pouco restritivas e podem ser flexibilizadas.", points: 1 }] },
+            { question: "Qual cenário de trabalho te atrai mais?", options: [{ text: "Inspeção de segurança em uma obra, garantindo que tudo esteja correto.", points: 2 }, { text: "Trabalho em escritório, analisando relatórios de finanças.", points: 1 }] },
+            { question: "Você se sente responsável por:", options: [{ text: "Garantir a segurança e o bem-estar das pessoas ao seu redor.", points: 2 }, { text: "Apenas o seu próprio desempenho e resultados.", points: 1 }] }
         ],
         'Serviços Jurídicos': [
-            { question: "Você tem facilidade em ler e interpretar textos complexos, como regulamentos ou leis?", options: [{ text: "Sim, consigo entender bem", points: 2 }, { text: "Não, acho difícil", points: 1 }] },
-            { question: "Você é uma pessoa que se atenta aos detalhes e à precisão?", options: [{ text: "Sim, sou bem detalhista", points: 2 }, { text: "Não muito", points: 1 }] },
-            { question: "Acha fascinante o funcionamento do sistema judiciário e das leis?", options: [{ text: "Sim, é um campo interessante", points: 2 }, { text: "Não, é muito burocrático", points: 1 }] },
-            { question: "Você se sente confortável em fazer pesquisas e organizar grandes volumes de informações?", options: [{ text: "Sim, é uma tarefa que gosto", points: 2 }, { text: "Não, acho cansativo", points: 1 }] }
+            { question: "Quando você assiste a um filme ou série com tema de tribunal, você:", options: [{ text: "Presta atenção aos detalhes da argumentação e das leis.", points: 2 }, { text: "Se concentra mais nos dramas e nas reviravoltas emocionais.", points: 1 }] },
+            { question: "Qual tipo de leitura você prefere?", options: [{ text: "Livros e artigos que exigem atenção aos detalhes e análise crítica.", points: 2 }, { text: "Romances de ficção e fantasia.", points: 1 }] },
+            { question: "Qual a sua maior qualidade para um projeto de pesquisa?", options: [{ text: "Capacidade de encontrar informações e organizar dados complexos.", points: 2 }, { text: "Facilidade em apresentar a pesquisa de forma visualmente atraente.", points: 1 }] },
+            { question: "Qual cenário te atrai mais?", options: [{ text: "Analisar um contrato detalhadamente em busca de erros.", points: 2 }, { text: "Fazer uma apresentação criativa para um grande público.", points: 1 }] }
         ]
     };
+
+    // Dados para o Jogo da Memória
+    const memoryCardsData = [
+        { icon: 'fas fa-laptop-code', id: 'dev' },
+        { icon: 'fas fa-users', id: 'rh' },
+        { icon: 'fas fa-chart-line', id: 'adm' },
+        { icon: 'fas fa-bullhorn', id: 'marketing' },
+        { icon: 'fas fa-truck', id: 'logistica' },
+        { icon: 'fas fa-hard-hat', id: 'seguranca' },
+        { icon: 'fas fa-gavel', id: 'juridico' },
+        { icon: 'fas fa-globe-americas', id: 'comex' },
+    ];
     
     function advanceQuiz(points, button) {
         if (button) {
@@ -953,6 +1185,7 @@
         document.querySelectorAll('.screen').forEach(screen => {
             screen.style.display = 'none';
         });
+        document.getElementById('courses-screen').style.display = 'none';
 
         const targetScreen = document.getElementById(screenId);
         targetScreen.style.display = 'flex';
@@ -971,13 +1204,34 @@
 
     function startGame() {
         currentQuestionIndex = 0;
+        currentMiniGameIndex = 0;
         scores = {};
         for(const course of Object.keys(courses)) {
             scores[course] = 0;
         }
-        showScreen('quiz-screen');
-        loadQuestion();
-        updateProgressBar();
+        playNextMiniGame();
+    }
+    
+    function playNextMiniGame() {
+        if (currentMiniGameIndex < miniGamesSequence.length) {
+            const nextGame = miniGamesSequence[currentMiniGameIndex];
+            if (nextGame === 'memory') {
+                showScreen('memory-game-screen');
+                setupMemoryGame();
+            } else if (nextGame === 'jokenpo') {
+                showScreen('rock-paper-scissors-screen');
+                setupJokenpoGame();
+            } else if (nextGame === 'tictactoe') {
+                showScreen('tictactoe-screen');
+                setupTictactoeGame();
+            }
+            currentMiniGameIndex++;
+        } else {
+            // Todos os mini-jogos foram jogados, inicie o quiz
+            showScreen('quiz-screen');
+            loadQuestion();
+            updateProgressBar();
+        }
     }
     
     function startMiniQuiz(courseName) {
@@ -1005,7 +1259,7 @@
             `;
             coursesListContainer.appendChild(courseItem);
         }
-        showScreen('courses-screen');
+        document.getElementById('courses-screen').style.display = 'block';
     }
     
     function renderClickableQuestion(question, container, advanceFunction) {
@@ -1394,7 +1648,10 @@
     backButtonIconCourses.addEventListener('click', () => showScreen('start-screen'));
     backButtonIconChoose.addEventListener('click', () => showScreen('start-screen'));
     backButtonIconMiniQuiz.addEventListener('click', () => showScreen('choose-course-screen'));
-    
+    backButtonIconMemory.addEventListener('click', () => showScreen('start-screen'));
+    backButtonIconJokenpo.addEventListener('click', () => showScreen('start-screen'));
+    backButtonIconTictactoe.addEventListener('click', () => showScreen('start-screen'));
+
     restartButton.addEventListener('click', () => showScreen('start-screen'));
     restartMiniQuizBtn.addEventListener('click', () => {
         miniQuizResultModal.style.display = 'none';
@@ -1418,6 +1675,232 @@
     });
 
     showScreen('start-screen');
+
+    // === LÓGICA DO JOGO DA MEMÓRIA ===
+    function setupMemoryGame() {
+        memoryGameGrid.innerHTML = '';
+        const gameCards = [...memoryCardsData, ...memoryCardsData];
+        shuffle(gameCards);
+
+        gameCards.forEach(card => {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'memory-card';
+            cardElement.dataset.cardId = card.id;
+            cardElement.innerHTML = `
+                <div class="front-face"><i class="${card.icon}"></i></div>
+                <div class="back-face">Fetec</div>
+            `;
+            cardElement.addEventListener('click', flipCard);
+            memoryGameGrid.appendChild(cardElement);
+        });
+
+        hasFlippedCard = false;
+        lockBoard = false;
+        firstCard = null;
+        secondCard = null;
+        matchedPairsCount = 0;
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function flipCard() {
+        if (lockBoard) return;
+        if (this === firstCard) return;
+
+        this.classList.add('flip');
+
+        if (!hasFlippedCard) {
+            hasFlippedCard = true;
+            firstCard = this;
+            return;
+        }
+
+        secondCard = this;
+        lockBoard = true;
+        checkForMatch();
+    }
+
+    function checkForMatch() {
+        let isMatch = firstCard.dataset.cardId === secondCard.dataset.cardId;
+        
+        if (isMatch) {
+            disableCards();
+            matchedPairsCount++;
+            if (matchedPairsCount === totalPairs) {
+                setTimeout(() => {
+                    alert('Parabéns, você encontrou todos os pares! Vamos para a próxima fase.');
+                    playNextMiniGame();
+                }, 1000);
+            }
+        } else {
+            unflipCards();
+        }
+    }
+
+    function disableCards() {
+        firstCard.removeEventListener('click', flipCard);
+        secondCard.removeEventListener('click', flipCard);
+        resetBoard();
+    }
+
+    function unflipCards() {
+        setTimeout(() => {
+            firstCard.classList.remove('flip');
+            secondCard.classList.remove('flip');
+            resetBoard();
+        }, 1500);
+    }
+
+    function resetBoard() {
+        [hasFlippedCard, lockBoard] = [false, false];
+        [firstCard, secondCard] = [null, null];
+    }
+    
+    // === LÓGICA DO JOGO DA VELHA (TIC TAC TOE) ===
+    function setupTictactoeGame() {
+        tictactoeBoard = ['', '', '', '', '', '', '', '', ''];
+        tictactoePlayer = 'X';
+        tictactoeGameActive = true;
+        tictactoeStatus.textContent = "Sua vez (X)";
+        tictactoeRestartBtn.classList.add('hidden');
+        document.querySelectorAll('.tictactoe-cell').forEach(cell => {
+            cell.textContent = '';
+            cell.classList.remove('win');
+            cell.addEventListener('click', handleTictactoeCellClick, { once: true });
+        });
+    }
+
+    function handleTictactoeCellClick(e) {
+        const clickedCell = e.target;
+        const clickedCellIndex = parseInt(clickedCell.getAttribute('data-cell-index'));
+
+        if (tictactoeBoard[clickedCellIndex] !== '' || !tictactoeGameActive) {
+            return;
+        }
+
+        tictactoeBoard[clickedCellIndex] = tictactoePlayer;
+        clickedCell.textContent = tictactoePlayer;
+        
+        checkTictactoeResult();
+        
+        if (tictactoeGameActive) {
+            tictactoePlayer = tictactoePlayer === 'X' ? 'O' : 'X';
+            tictactoeStatus.textContent = `Vez da Fetec (${tictactoePlayer})`;
+            if (tictactoePlayer === 'O') {
+                setTimeout(handleComputerMove, 500);
+            }
+        }
+    }
+    
+    function handleComputerMove() {
+        if (!tictactoeGameActive) return;
+
+        let availableCells = tictactoeBoard.map((cell, index) => cell === '' ? index : null).filter(val => val !== null);
+        let computerMove = availableCells[Math.floor(Math.random() * availableCells.length)];
+        
+        tictactoeBoard[computerMove] = tictactoePlayer;
+        document.querySelector(`[data-cell-index="${computerMove}"]`).textContent = tictactoePlayer;
+        document.querySelector(`[data-cell-index="${computerMove}"]`).removeEventListener('click', handleTictactoeCellClick);
+
+        checkTictactoeResult();
+        if (tictactoeGameActive) {
+            tictactoePlayer = 'X';
+            tictactoeStatus.textContent = `Sua vez (X)`;
+        }
+    }
+
+    function checkTictactoeResult() {
+        let roundWon = false;
+        for (let i = 0; i < tictactoeWinningConditions.length; i++) {
+            const winCondition = tictactoeWinningConditions[i];
+            let a = tictactoeBoard[winCondition[0]];
+            let b = tictactoeBoard[winCondition[1]];
+            let c = tictactoeBoard[winCondition[2]];
+
+            if (a === '' || b === '' || c === '') {
+                continue;
+            }
+            if (a === b && b === c) {
+                roundWon = true;
+                break;
+            }
+        }
+
+        if (roundWon) {
+            tictactoeStatus.textContent = `O jogador ${tictactoePlayer} venceu!`;
+            tictactoeGameActive = false;
+            tictactoeRestartBtn.classList.remove('hidden');
+            if (tictactoePlayer === 'X') {
+                setTimeout(() => {
+                    alert('Parabéns, você venceu a Fetec! Vamos para a próxima fase.');
+                    playNextMiniGame();
+                }, 1000);
+            }
+            return;
+        }
+
+        let roundDraw = !tictactoeBoard.includes('');
+        if (roundDraw) {
+            tictactoeStatus.textContent = 'Empate!';
+            tictactoeGameActive = false;
+            tictactoeRestartBtn.classList.remove('hidden');
+            return;
+        }
+    }
+
+    tictactoeRestartBtn.addEventListener('click', setupTictactoeGame);
+    document.querySelectorAll('.tictactoe-cell').forEach(cell => cell.addEventListener('click', handleTictactoeCellClick));
+    
+    // === LÓGICA DO PEDRA, PAPEL E TESOURA (JOKENPÔ) ===
+    function setupJokenpoGame() {
+        jokenpoWins = 0;
+        jokenpoResult.textContent = 'Faça sua jogada!';
+        jokenpoScore.textContent = `Vitórias: ${jokenpoWins} de ${jokenpoTargetWins}`;
+    }
+
+    jokenpoButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const playerChoice = button.id.replace('jokenpo-', '');
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            let result = '';
+            if (playerChoice === computerChoice) {
+                result = 'Empate!';
+            } else if (
+                (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                (playerChoice === 'paper' && computerChoice === 'rock') ||
+                (playerChoice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result = 'Você Venceu!';
+                jokenpoWins++;
+            } else {
+                result = 'Você Perdeu!';
+            }
+
+            jokenpoResult.textContent = `Você escolheu ${getEmoji(playerChoice)}, o computador escolheu ${getEmoji(computerChoice)}. ${result}`;
+            jokenpoScore.textContent = `Vitórias: ${jokenpoWins} de ${jokenpoTargetWins}`;
+
+            if (jokenpoWins >= jokenpoTargetWins) {
+                setTimeout(() => {
+                    alert('Parabéns, você venceu o suficiente! Vamos para a próxima fase.');
+                    playNextMiniGame();
+                }, 1000);
+            }
+        });
+    });
+
+    function getEmoji(choice) {
+        if (choice === 'rock') return 'Pedra';
+        if (choice === 'paper') return 'Papel';
+        if (choice === 'scissors') return 'Tesoura';
+        return '';
+    }
 </script>
 </body>
 </html>
