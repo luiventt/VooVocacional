@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada do Conhecimento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        @font-face {
+            font-family: caixaalta;
+            src: url(fonte/BarberChop.otf);
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('https://i.pinimg.com/originals/b6/e3/ef/b6e3ef535fc0f404923b5f939d367b9a.gif'), url('https://static.vecteezy.com/ti/vetor-gratis/p1/42818355-8-bits-pixel-grafico-azul-ceu-fundo-com-nuvens-vetor.jpg'); 
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a5568;
+            overflow: hidden;
+            position: relative;
+        }
+        .main-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            padding: 2.5rem;
+            width: 95%;
+            max-width: 800px;
+            text-align: center;
+            transition: all 0.5s ease-in-out;
+            position: relative;
+        }
+        .rainbow-title {
+            background: linear-gradient(to left, #00a8d4, #9cbb17, #fae41e, #fc803f, #ee4035);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 1000;
+            font-family: caixaalta;
+            font-size: 4rem;
+        }
+        #start-screen h1{
+            font-size: 70px;
+        }
+        .dialogue-box {
+            background-color: #f0faff;
+            color: #2c5282;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #00a8d4;
+            font-style: italic;
+            margin-bottom: 2rem;
+            position: relative;
+            text-align: center;
+        }
+        .start-btn {
+            background: #00a8d4;
+            color: #ffffff;
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        #botoesinicio{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .quiz-section, .courses-section, .choose-course-section, .mini-quiz-section {
+            display: none;
+        }
+        .question-card {
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: left;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+        .option-btn {
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: #4a5568;
+            background: #e2e8f0;
+            border: 2px solid #cbd5e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+        }
+        .option-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            background: #d4eaf7;
+        }
+        
+        .option-btn[draggable="true"] {
+            cursor: grab;
+        }
+
+        /* Animação para o clique com a nova cor */
+        .option-btn.selected {
+            animation: pulse 0.5s ease-in-out;
+            background-color:#e2e8f0c4; /* Novo verde vivo */
+            color: 4a5568;
+            border-color: #e2e8f08a; /* Novo verde vivo */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .sentence-container {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+        .droppable-placeholder {
+            display: inline-block;
+            min-width: 150px;
+            min-height: 2rem;
+            background-color: #e2e8f0;
+            border: 1px dashed black;
+            border-radius: 0.5rem;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            line-height: 2rem;
+            color: transparent; /* Esconde o texto, se houver */
+        }
+        
+        .droppable-placeholder.active {
+            background-color: #d4eaf7;
+            border-color: #fae41e;
+        }
+        
+        .droppable-placeholder.filled {
+            background: #e2e8f0;
+            border: 2px solid #cbd5e0;
+            color: #4a5568;
+            padding: 0 0.5rem;
+        }
+        
+        .result-card {
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 2px solid #00a8d4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1000px;
+        }
+        .result-layout {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+            width: 100%;
+        }
+        .result-layout > div {
+            flex: 1 1 350px;
+        }
+        /* Correção para exibir a barra de progresso */
+        .progress-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            height: 12px;
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+            display: none;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, #00a8d4, #9cbb17, #fae41e, #fc803f, #ee4035);
+            border-radius: 9999px;
+            transition: width 0.5s ease-in-out;
+        }
+        .courses-list {
+            text-align: left;
+            margin-top: 2rem;
+            max-height: 500px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .course-item {
+            background-color: #f0faff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #00a8d4;
+        }
+        .back-button-icon {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 1.5rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .back-button-icon:hover {
+            transform: scale(1.2);
+        }
+        #result-course-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .course-icon-in-title {
+            font-size: 3rem;
+            color: #00a8d4;
+            margin-right: 1rem;
+        }
+        #result-course {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00a8d4;
+            text-align: center;
+        }
+        .audio-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #00a8d4;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        .audio-button:hover {
+            transform: scale(1.2);
+        }
+        .character-name {
+            font-weight: 700;
+            color: #9cbb17;
+        }
+        .question-color-1 { background-color: #00a8d4; color: white; }
+        .question-color-2 { background-color: #9cbb17; color: white; }
+        .question-color-3 { background-color: #fae41e; color: black; }
+        .question-color-4 { background-color: #fc803f; color: white; }
+        .question-color-5 { background-color: #ee4035; color: white; }
+        #affinity-chart-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .info-left, .chart-right {
+            text-align: center;
+        }
+        #course-icon {
+            font-size: 4rem;
+            color: #00a8d4;
+            margin-bottom: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border: 2px solid #00a8d4;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 1.5rem;
+            color: #00a8d4;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .modal-close:hover {
+            transform: scale(1.2);
+        }
+
+        /* Novas classes para a mecânica de slider */
+        .slider-container {
+            width: 100%;
+            padding: 1.5rem;
+            background-color: #f0faff;
+            border-radius: 1rem;
+            border: 1px solid #00a8d4;
+            margin-top: 1.5rem;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .slider-value {
+            font-weight: 700;
+            color: #00a8d4;
+            margin-top: 0.5rem;
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            background: #cbd5e0;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            border-radius: 9999px;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #00a8d4;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #00a8d4;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        /* Novas classes para a mecânica de ordenação */
+        .sortable-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .sortable-item {
+            padding: 1rem;
+            border-radius: 1.5rem;
+            color: #4a5568;
+            background: #e2e8f0;
+            border: 2px solid #cbd5e0;
+            cursor: grab;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .sortable-item:active {
+            cursor: grabbing;
+        }
+        .sortable-item.dragging {
+            opacity: 0.5;
+            border: 2px dashed #00a8d4;
+            transform: scale(1.02);
+        }
+        .sortable-item i {
+            margin-right: 1rem;
+            color: #00a8d4;
+        }
+        .sortable-number {
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            background-color: #00a8d4;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .submit-btn {
+            background: #9cbb17;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Alterações para o layout de duas linhas */
+        .choose-course-section {
+            max-width: 1200px;
+            width: 95%;
+            margin: auto;
+            min-height: 100vh; /* Garante que a div tenha altura total para centralização */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centraliza verticalmente o conteúdo */
+            align-items: center; /* Centraliza horizontalmente o conteúdo */
+        }
+        .choose-course-section .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            padding: 2.5rem;
+            width: 100%;
+            border: 2px solid #00a8d4;
+            position: relative;
+        }
+
+        .choose-course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Layout responsivo */
+            gap: 1.5rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+        
+        .choose-course-item {
+            background-color: #f0faff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 2px solid #00a8d4;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .choose-course-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="background-audio" loop autoplay>
+        <source src="https://www.soundimage.org/wp-content/uploads/2018/06/Magical-Unicorn-Dreams.mp3" type="audio/mpeg">
+    </audio>
+
+    <i id="audio-button" class="fas fa-volume-up audio-button"></i>
+
+    <div id="start-screen" class="screen flex-col items-center p-6">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-8 text-center rainbow-title">Teste Vocacional</h1>
+        <div class="main-container">
+            <h2 class="text-2xl font-bold mb-4 text-gray-700">Bem-vindo à Fatec!</h2>
+            <p class="text-lg mb-12 font-light text-gray-500">
+                Este quiz irá te auxiliar a encontrar um curso que combine com você ou testar sua compatibilidade com um algum curso que você já pensa em fazer!
+            </p>
+            <div id="botoesinicio" class="flex gap-4 justify-center flex-wrap">
+                <button id="start-button" class="start-btn">
+                    Descubra seu curso <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <button id="start-mini-quiz-button" class="start-btn bg-purple-600 hover:bg-purple-700 transition-colors duration-300">
+                    Compatibilidade <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <button id="show-courses-button" class="start-btn bg-gray-400 hover:bg-gray-500 transition-colors duration-300">
+                    Ver os cursos
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="choose-course-screen" class="screen choose-course-section">
+        <div class="content-wrapper">
+            <i id="back-button-icon-choose" class="fas fa-arrow-left back-button-icon"></i>
+            <h2 class="text-3xl font-bold mb-2 text-gray-700 text-center">Compatibilidade</h2>
+            <p class="text-md mb-8 text-gray-500 text-center">
+                Selecione o que você deseja cursar!
+            </p>
+            <div id="choose-course-grid" class="choose-course-grid"></div>
+        </div>
+    </div>
+
+    <div id="courses-screen" class="main-container courses-section">
+        <i id="back-button-icon-courses" class="fas fa-arrow-left back-button-icon"></i>
+        <h2 class="text-3xl font-bold mb-4 text-gray-700">Todos os Cursos</h2>
+        <div id="courses-list" class="courses-list"></div>
+    </div>
+
+    <div id="quiz-screen" class="screen quiz-section relative flex-col items-center justify-center w-full">
+        <div id="progress-bar" class="progress-bar">
+            <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+        <div id="question-card" class="main-container question-card">
+            <div class="dialogue-box">
+                <p id="question-text" class="text-lg font-normal"></p>
+            </div>
+            <div id="dynamic-content">
+                </div>
+        </div>
+    </div>
+    
+    <div id="mini-quiz-screen" class="screen mini-quiz-section relative flex-col items-center justify-center w-full">
+        <i id="back-button-icon-mini-quiz" class="fas fa-arrow-left back-button-icon"></i>
+        <div id="mini-quiz-progress-bar" class="progress-bar">
+            <div id="mini-quiz-progress-bar-fill" class="mini-quiz-progress-bar-fill" style="width: 0%;"></div>
+        </div>
+        <div id="mini-quiz-card" class="main-container question-card">
+            <div class="dialogue-box">
+                <p id="mini-quiz-question-text" class="text-lg font-normal"></p>
+            </div>
+            <div id="mini-quiz-dynamic-content">
+                </div>
+        </div>
+    </div>
+
+    <div id="result-screen" class="screen quiz-section">
+        <div id="result-card" class="main-container result-card">
+            <h2 id="result-title" class="text-3xl md:text-4xl font-extrabold mb-4 rainbow-title">Você combina com:</h2>
+            <div id="result-course-container">
+                <i id="course-icon-in-title" class="course-icon-in-title"></i>
+                <p id="result-course"></p>
+            </div>
+            <div class="result-layout">
+                <div class="info-left text-left">
+                    <div id="course-description" class="description-box bg-gray-100 p-4 rounded-lg mt-4"></div>
+                </div>
+                <div class="chart-right text-right">
+                    <h3 class="text-2xl font-bold mb-4 text-gray-700">Seu ranking de cursos</h3>
+                    <div id="affinity-chart-container">
+                        <canvas id="affinityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <button id="restart-button" class="start-btn mt-6">
+                Volte para a página inicial <i class="fas fa-redo ml-2"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div id="mini-quiz-result-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 class="text-3xl font-bold mb-4 text-gray-700">Porcentagem</h3>
+            <p id="mini-quiz-result-text" class="text-lg mb-4 text-gray-600"></p>
+            <div id="mini-quiz-progress-circle" class="relative w-40 h-40 mx-auto my-8">
+                <canvas id="miniQuizChart"></canvas>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span id="mini-quiz-percentage" class="text-4xl font-bold text-gray-800"></span>
+                    <span class="text-sm text-gray-500"></span>
+                </div>
+            </div>
+            <button id="restart-mini-quiz-btn" class="start-btn">
+                Tentar Outro Curso <i class="fas fa-redo ml-2"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div id="tutorial-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <i id="close-modal" class="fas fa-times modal-close"></i>
+            <h3 class="text-3xl font-bold mb-4 text-gray-700">Atenção</h3>
+            <p class="text-lg mb-4 text-gray-600">
+                Responda a todas as perguntas para descobrir qual curso mais combina com você!
+            </p>
+            <p class="text-lg mb-8 text-gray-600">
+                
+            </p>
+            <p class="text-md mb-8 text-purple-600 font-bold">
+                 Este quiz possuí minigames integrados para uma experiência ainda mais completa! Vença eles para conseguir receber seu resultado.
+            </p>
+            <button id="start-quiz-from-modal" class="start-btn">
+                Vamos Lá! <i class="fas fa-play ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+<script>
+    const startScreen = document.getElementById('start-screen');
+    const coursesScreen = document.getElementById('courses-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const startButton = document.getElementById('start-button');
+    const showCoursesButton = document.getElementById('show-courses-button');
+    const startMiniQuizButton = document.getElementById('start-mini-quiz-button');
+    const backButtonIconCourses = document.getElementById('back-button-icon-courses');
+    const backButtonIconChoose = document.getElementById('back-button-icon-choose');
+    const backButtonIconMiniQuiz = document.getElementById('back-button-icon-mini-quiz');
+    const restartButton = document.getElementById('restart-button');
+    const questionText = document.getElementById('question-text');
+    const dynamicContent = document.getElementById('dynamic-content');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const progressBar = document.getElementById('progress-bar');
+    const coursesListContainer = document.getElementById('courses-list');
+    const backgroundAudio = document.getElementById('background-audio');
+    const audioButton = document.getElementById('audio-button');
+    const tutorialModal = document.getElementById('tutorial-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const startQuizFromModalBtn = document.getElementById('start-quiz-from-modal');
+    const chooseCourseScreen = document.getElementById('choose-course-screen');
+    const chooseCourseGrid = document.getElementById('choose-course-grid');
+    const miniQuizScreen = document.getElementById('mini-quiz-screen');
+    const miniQuizQuestionText = document.getElementById('mini-quiz-question-text');
+    const miniQuizDynamicContent = document.getElementById('mini-quiz-dynamic-content');
+    const miniQuizProgressBarFill = document.getElementById('mini-quiz-progress-bar-fill');
+    const miniQuizProgressBar = document.getElementById('mini-quiz-progress-bar');
+    const miniQuizResultModal = document.getElementById('mini-quiz-result-modal');
+    const miniQuizResultText = document.getElementById('mini-quiz-result-text');
+    const miniQuizPercentage = document.getElementById('mini-quiz-percentage');
+    const restartMiniQuizBtn = document.getElementById('restart-mini-quiz-btn');
+    
+    let affinityChartInstance = null;
+    let miniQuizChartInstance = null;
+    let currentQuestionIndex = 0;
+    let scores = {};
+    let miniQuizQuestions = [];
+    let currentMiniQuizQuestionIndex = 0;
+    let miniQuizScore = 0;
+    let selectedMiniQuizCourse = '';
+    
+    const questionColors = ['question-color-1', 'question-color-2', 'question-color-3', 'question-color-4', 'question-color-5'];
+
+    const courses = {
+        'Administração': {
+            description: 'Trabalha com o planejamento, organização e controle de recursos de uma empresa.',
+            areas: 'Gestão Empresarial, Finanças, Marketing, Recursos Humanos.',
+            icon: 'fas fa-chart-line',
+            traits: ['Liderança', 'Organização', 'Estratégia', 'Análise']
+        },
+        'Comércio Exterior': {
+            description: 'Gerencia processos de compra e venda de produtos e serviços entre países.',
+            areas: 'Importação e Exportação, Logística Internacional, Câmbio e Negociação.',
+            icon: 'fas fa-globe-americas',
+            traits: ['Negociação', 'Comunicação', 'Global', 'Liderança']
+        },
+        'Cuidados de Idosos': {
+            description: 'Profissional especializado em proporcionar bem-estar e qualidade de vida para pessoas idosas.',
+            areas: 'Saúde e Higiene, Nutrição, Atividades Recreativas, Acompanhamento.',
+            icon: 'fas fa-hands-helping',
+            traits: ['Empatia', 'Paciência', 'Cuidado', 'Dedicação']
+        },
+        'Desenvolvimento de Sistemas': {
+            description: 'Cria, projeta e mantém softwares e aplicativos, resolvendo problemas com código.',
+            areas: 'Programação Web, Desenvolvimento Mobile, Análise de Sistemas, Banco de Dados.',
+            icon: 'fas fa-laptop-code',
+            traits: ['Lógica', 'Resolução de Problemas', 'Inovação', 'Criatividade']
+        },
+        'Informática para Internet': {
+            description: 'Desenvolve e mantém sites e aplicativos para a web, com foco na interface e lógica.',
+            areas: 'Criação de Sites, Front-end, Back-end, E-commerce, Design Digital.',
+            icon: 'fas fa-wifi',
+            traits: ['Criatividade', 'Inovação', 'Visual', 'Lógica']
+        },
+        'Logística': {
+            description: 'Organiza e gerencia a movimentação e armazenamento de produtos.',
+            areas: 'Gestão de Estoques, Distribuição e Transporte, Cadeia de Suprimentos.',
+            icon: 'fas fa-truck',
+            traits: ['Organização', 'Planejamento', 'Eficiência', 'Detalhes']
+        },
+        'Marketing': {
+            description: 'Cria estratégias para divulgar produtos, serviços e marcas de forma eficaz.',
+            areas: 'Marketing Digital, Pesquisa de Mercado, Análise de Dados, Branding.',
+            icon: 'fas fa-bullhorn',
+            traits: ['Comunicação', 'Estratégia', 'Criatividade', 'Análise']
+        },
+        'Recursos Humanos': {
+            description: 'Cuida da gestão de pessoas em uma empresa, buscando o bem-estar dos colaboradores.',
+            areas: 'Recrutamento e Seleção, Treinamento, Benefícios, Relações Trabalhistas.',
+            icon: 'fas fa-users',
+            traits: ['Empatia', 'Comunicação', 'Liderança', 'Organização']
+        },
+        'Segurança do Trabalho': {
+            description: 'Atua na prevenção de acidentes e doenças ocupacionais em ambientes de trabalho.',
+            areas: 'Prevenção de Acidentes, Normas de Segurança, Análise de Riscos, Ergonomia.',
+            icon: 'fas fa-hard-hat',
+            traits: ['Detalhes', 'Prevenção', 'Responsabilidade', 'Lógica']
+        },
+        'Serviços Jurídicos': {
+            description: 'Presta apoio técnico a advogados e escritórios de advocacia.',
+            areas: 'Documentação Jurídica, Pesquisa de Legislação, Apoio a Processos.',
+            icon: 'fas fa-gavel',
+            traits: ['Análise', 'Organização', 'Detalhes', 'Pesquisa']
+        }
+    };
+
+    const questions = [
+        {
+            type: 'click',
+            question: "Num mundo de jogos, qual seria seu papel ideal?",
+            options: [
+                { text: "O estrategista que monta o plano de ataque para o time.", points: { 'Administração': 2, 'Logística': 1 } },
+                { text: "O que ajuda a guild a resolver conflitos e se manter unida.", points: { 'Recursos Humanos': 2, 'Cuidados de Idosos': 1 } },
+                { text: "O que encontra falhas no código do jogo para criar novas funcionalidades.", points: { 'Desenvolvimento de Sistemas': 2, 'Informática para Internet': 2 } },
+                { text: "O influenciador que faz streams e cria o hype em volta do jogo.", points: { 'Marketing': 1, 'Comércio Exterior': 1 } }
+            ]
+        },
+        {
+            type: 'click',
+            question: "Se você fosse um animal, qual seria sua principal característica?",
+            options: [
+                { text: "O instinto de leão, defendendo a equipe e seus objetivos.", points: { 'Administração': 2, 'Recursos Humanos': 2 } },
+                { text: "A paciência e o carinho de um gato com quem precisa de ajuda.", points: { 'Recursos Humanos': 2, 'Cuidados de Idosos': 2 } },
+                { text: "A criatividade de um camaleão, se adaptando a qualquer ambiente digital.", points: { 'Informática para Internet': 2, 'Marketing': 2 } },
+                { text: "A audácia de uma águia, planejando voos longos e observando tudo de longe.", points: { 'Logística': 2, 'Comércio Exterior': 2 } }
+            ]
+        },
+        {
+            type: 'click',
+            question: "Qual famosa tendência você mais gosta?",
+            options: [
+                { text: "A ascensão da inteligência artificial (IA) e seu impacto na tecnologia.", points: { 'Desenvolvimento de Sistemas': 2, 'Informática para Internet': 2 } },
+                { text: "A expansão do K-Pop globalmente, com suas coreografias e produções complexas.", points: { 'Marketing': 2, 'Comércio Exterior': 1 } },
+                { text: "Os desafios de segurança da internet e a proteção de dados.", points: { 'Segurança do Trabalho': 2, 'Serviços Jurídicos': 1 } },
+                { text: "A onda de bem-estar e saúde mental que está dominando as redes sociais.", points: { 'Recursos Humanos': 2, 'Cuidados de Idosos': 2 } }
+            ]
+        },
+        {
+            type: 'slider',
+            question: "Avalie o quanto você se sente à vontade ao ter que liderar uma equipe para completar uma missão?",
+            min: 0,
+            max: 10,
+            step: 1,
+            points: {
+                'Administração': 2,
+                'Recursos Humanos': 1,
+                'Comércio Exterior': 1
+            }
+        },
+        {
+            type: 'click',
+            question: "Você tem que organizar um evento para a comunidade nerd. Qual tarefa você prefere?",
+            options: [
+                { text: "Gerenciar o cronograma e garantir que tudo ocorra como planejado.", points: { 'Administração': 2, 'Logística': 2 } },
+                { text: "Garantir que os participantes se sintam acolhidos e tenham uma boa experiência.", points: { 'Recursos Humanos': 3, 'Cuidados de Idosos': 2 } },
+                { text: "Criar o site do evento com um design incrível e uma experiência de usuário perfeita.", points: { 'Informática para Internet': 2, 'Marketing': 2 } },
+                { text: "Revisar as regras de segurança e os contratos com os fornecedores.", points: { 'Serviços Jurídicos': 2, 'Segurança do Trabalho': 2 } }
+            ]
+        },
+        {
+            type: 'click',
+            question: "Qual problema você preferiria resolver?",
+            options: [
+                { text: "Ajudar seu avô a usar o TikTok ou uma nova plataforma de streaming.", points: { 'Cuidados de Idosos': 3, 'Recursos Humanos': 2 } },
+                { text: "Criar um bot que otimiza a organização de um chat no Discord.", points: { 'Logística': 3, 'Desenvolvimento de Sistemas': 2 } },
+                { text: "Garantir que as regras de um torneio de e-sports sejam justas para todos.", points: { 'Segurança do Trabalho': 3, 'Administração': 1 } },
+                { text: "Analisar as métricas de um canal no YouTube para entender o que viralizou.", points: { 'Marketing': 2, 'Comércio Exterior': 2 } }
+            ]
+        },
+        {
+            type: 'sentence-completion',
+            question: "Num universo de animes, eu escolheria um superpoder de ... para ...",
+            options: [
+                { text: "hacker que invade sistemas", points: { 'Desenvolvimento de Sistemas': 3, 'Informática para Internet': 3 } },
+                { text: "liderança e comunicação", points: { 'Comércio Exterior': 3, 'Recursos Humanos': 3 } },
+                { text: "segurança e proteção", points: { 'Segurança do Trabalho': 3, 'Serviços Jurídicos': 2 } },
+                { text: "marketing e criatividade", points: { 'Marketing': 3, 'Comércio Exterior': 2 } }
+            ]
+        },
+        {
+            type: 'click',
+            question: "Você tem um tempo livre para uma nova atividade. O que você faria?",
+            options: [
+                { text: "Criaria um canal no YouTube ou TikTok para ensinar algo ou falar sobre um tema que amo.", points: { 'Marketing': 3, 'Comércio Exterior': 2, 'Informática para Internet': 2 } },
+                { text: "Aprenderia uma nova língua ou sobre a cultura de um país distante para viajar no futuro.", points: { 'Comércio Exterior': 3, 'Marketing': 2, 'Serviços Jurídicos': 1 } },
+                { text: "Desenvolveria um aplicativo ou um site para um projeto pessoal.", points: { 'Desenvolvimento de Sistemas': 3, 'Informática para Internet': 3, 'Logística': 2 } },
+                { text: "Faria voluntariado em uma ONG, ajudando pessoas ou animais.", points: { 'Cuidados de Idosos': 3, 'Recursos Humanos': 3 } }
+            ]
+        },
+        {
+            type: 'sort',
+            question: "Qual a ordem de importância para você em um projeto de grupo?",
+            options: [
+                { text: "A comunicação clara entre todos", points: { 'Recursos Humanos': 3, 'Comércio Exterior': 2, 'Administração': 1 } },
+                { text: "A organização das tarefas", points: { 'Logística': 3, 'Administração': 2, 'Desenvolvimento de Sistemas': 1 } },
+                { text: "O cumprimento das regras e prazos", points: { 'Serviços Jurídicos': 3, 'Segurança do Trabalho': 2, 'Logística': 1 } }
+            ]
+        }
+    ];
+
+    // Mini Quiz Questions
+    const miniQuizQuestionsData = {
+        'Administração': [
+            { question: "Você se vê mais como um líder de equipe ou um membro especializado?", options: [{ text: "Líder de equipe", points: 2 }, { text: "Membro especializado", points: 1 }] },
+            { question: "Em um projeto, você prefere planejar e gerenciar o orçamento ou executar as tarefas?", options: [{ text: "Planejar e gerenciar", points: 2 }, { text: "Executar as tarefas", points: 1 }] },
+            { question: "Quando surge um problema, você busca soluções estratégicas a longo prazo?", options: [{ text: "Sim", points: 2 }, { text: "Não", points: 1 }] },
+            { question: "Você gosta de analisar dados e relatórios para tomar decisões?", options: [{ text: "Sim", points: 2 }, { text: "Não", points: 1 }] }
+        ],
+        'Comércio Exterior': [
+            { question: "Você tem curiosidade sobre a cultura e economia de outros países?", options: [{ text: "Sim, muita!", points: 2 }, { text: "Não tanto", points: 1 }] },
+            { question: "Você se sente confortável negociando com pessoas de diferentes backgrounds?", options: [{ text: "Sim, totalmente", points: 2 }, { text: "Não muito", points: 1 }] },
+            { question: "Qual a sua visão sobre a globalização?", options: [{ text: "É uma oportunidade incrível", points: 2 }, { text: "É um desafio complexo", points: 1 }] },
+            { question: "Em um projeto de logística, você se preocupa mais com a rapidez ou com a segurança da entrega internacional?", options: [{ text: "Rapidez", points: 1 }, { text: "Segurança", points: 2 }] }
+        ],
+        'Cuidados de Idosos': [
+            { question: "Você tem paciência e gosta de ouvir histórias de vida?", options: [{ text: "Sim, adoro!", points: 2 }, { text: "Não muito", points: 1 }] },
+            { question: "Você se sente à vontade para ajudar outras pessoas com tarefas diárias?", options: [{ text: "Sim, sem problemas", points: 2 }, { text: "Não", points: 1 }] },
+            { question: "A empatia é uma característica que você valoriza em si mesmo?", options: [{ text: "Sim, com certeza", points: 2 }, { text: "Não é minha maior força", points: 1 }] },
+            { question: "Você se sente bem em ambientes que exigem calma e dedicação?", options: [{ text: "Sim, prefiro assim", points: 2 }, { text: "Não, prefiro mais agitação", points: 1 }] }
+        ],
+        'Desenvolvimento de Sistemas': [
+            { question: "Você gosta de resolver quebra-cabeças e desafios de lógica?", options: [{ text: "Sim, é divertido", points: 2 }, { text: "Não muito", points: 1 }] },
+            { question: "Quando algo não funciona na internet, você tem vontade de entender o porquê?", options: [{ text: "Sim, sempre", points: 2 }, { text: "Não, só uso", points: 1 }] },
+            { question: "Você se vê mais criando o 'motor' de um site ou o design visual?", options: [{ text: "O motor (lógica)", points: 2 }, { text: "O design visual", points: 1 }] },
+            { question: "Você se considera uma pessoa que busca otimizar processos e automatizar tarefas?", options: [{ text: "Sim, com certeza", points: 2 }, { text: "Não, faço o que precisa ser feito", points: 1 }] }
+        ],
+        'Informática para Internet': [
+            { question: "Você se importa com a estética visual de um site ou aplicativo?", options: [{ text: "Sim, muito!", points: 2 }, { text: "Não é uma prioridade", points: 1 }] },
+            { question: "Você prefere criar interfaces de usuário ou mexer com bancos de dados?", options: [{ text: "Interfaces de usuário", points: 2 }, { text: "Bancos de dados", points: 1 }] },
+            { question: "O que mais te atrai: a funcionalidade ou o design de um site?", options: [{ text: "Design", points: 2 }, { text: "Funcionalidade", points: 1 }] },
+            { question: "Você gosta de acompanhar tendências de design e novas tecnologias web?", options: [{ text: "Sim, sempre", points: 2 }, { text: "Não muito", points: 1 }] }
+        ],
+        'Logística': [
+            { question: "Você é uma pessoa organizada e metódica em suas tarefas?", options: [{ text: "Sim, sou bem organizado(a)", points: 2 }, { text: "Não muito", points: 1 }] },
+            { question: "Você gosta de planejar rotas e otimizar processos para economizar tempo e recursos?", options: [{ text: "Sim, é satisfatório", points: 2 }, { text: "Não, acho chato", points: 1 }] },
+            { question: "Em um grupo, você é o que se preocupa com o cronograma e a entrega no prazo?", options: [{ text: "Sim, sempre", points: 2 }, { text: "Não, confio no grupo", points: 1 }] },
+            { question: "Você presta atenção aos detalhes e possíveis problemas em uma operação?", options: [{ text: "Sim, sou bem detalhista", points: 2 }, { text: "Não, vejo o quadro geral", points: 1 }] }
+        ],
+        'Marketing': [
+            { question: "Você gosta de criar e compartilhar conteúdo em redes sociais?", options: [{ text: "Sim, adoro!", points: 2 }, { text: "Não muito", points: 1 }] },
+            { question: "Acha divertido analisar o comportamento das pessoas e o que as motiva a comprar algo?", options: [{ text: "Sim, é fascinante", points: 2 }, { text: "Não, não me interesso", points: 1 }] },
+            { question: "Você é uma pessoa criativa e gosta de pensar em novas ideias?", options: [{ text: "Sim, sou bastante criativo", points: 2 }, { text: "Não tanto", points: 1 }] },
+            { question: "Seu trabalho ideal envolve comunicação constante e interação com o público?", options: [{ text: "Sim, é o que busco", points: 2 }, { text: "Não, prefiro algo mais reservado", points: 1 }] }
+        ],
+        'Recursos Humanos': [
+            { question: "Você se considera um bom ouvinte e mediador de conflitos?", options: [{ text: "Sim, as pessoas me procuram para desabafar", points: 2 }, { text: "Não, prefiro me manter distante de conflitos", points: 1 }] },
+            { question: "Você acredita que o bem-estar dos funcionários é essencial para o sucesso de uma empresa?", options: [{ text: "Sim, totalmente", points: 2 }, { text: "Não é a coisa mais importante", points: 1 }] },
+            { question: "O que mais te atrai: recrutamento e seleção de talentos ou organização de benefícios?", options: [{ text: "Recrutamento", points: 2 }, { text: "Organização de benefícios", points: 1 }] },
+            { question: "Você se sente confortável em dar feedback e orientar outras pessoas?", options: [{ text: "Sim, sem problemas", points: 2 }, { text: "Não, me sinto desconfortável", points: 1 }] }
+        ],
+        'Segurança do Trabalho': [
+            { question: "Você é uma pessoa atenta aos detalhes e preocupada com a segurança?", options: [{ text: "Sim, sou bastante cuidadoso(a)", points: 2 }, { text: "Não, sou mais relaxado(a)", points: 1 }] },
+            { question: "Você se interessa por normas, regras e legislação?", options: [{ text: "Sim, acho importante", points: 2 }, { text: "Não, acho entediante", points: 1 }] },
+            { question: "Você prefere prevenir um problema ou resolvê-lo depois que ele acontece?", options: [{ text: "Prevenir", points: 2 }, { text: "Resolver depois", points: 1 }] },
+            { question: "Você se vê como um 'guardião' que garante um ambiente de trabalho seguro para todos?", options: [{ text: "Sim, com certeza", points: 2 }, { text: "Não", points: 1 }] }
+        ],
+        'Serviços Jurídicos': [
+            { question: "Você tem facilidade em ler e interpretar textos complexos, como regulamentos ou leis?", options: [{ text: "Sim, consigo entender bem", points: 2 }, { text: "Não, acho difícil", points: 1 }] },
+            { question: "Você é uma pessoa que se atenta aos detalhes e à precisão?", options: [{ text: "Sim, sou bem detalhista", points: 2 }, { text: "Não muito", points: 1 }] },
+            { question: "Acha fascinante o funcionamento do sistema judiciário e das leis?", options: [{ text: "Sim, é um campo interessante", points: 2 }, { text: "Não, é muito burocrático", points: 1 }] },
+            { question: "Você se sente confortável em fazer pesquisas e organizar grandes volumes de informações?", options: [{ text: "Sim, é uma tarefa que gosto", points: 2 }, { text: "Não, acho cansativo", points: 1 }] }
+        ]
+    };
+    
+    function advanceQuiz(points, button) {
+        if (button) {
+            button.classList.add('selected');
+        }
+
+        for (const [course, value] of Object.entries(points)) {
+            scores[course] = (scores[course] || 0) + value;
+        }
+
+        setTimeout(() => {
+            if (button) {
+                button.classList.remove('selected');
+            }
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                updateProgressBar();
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }, 500);
+    }
+    
+    function advanceMiniQuiz(points, button) {
+        if (button) {
+            button.classList.add('selected');
+        }
+        
+        miniQuizScore += points;
+
+        setTimeout(() => {
+            if (button) {
+                button.classList.remove('selected');
+            }
+            if (currentMiniQuizQuestionIndex < miniQuizQuestions.length - 1) {
+                currentMiniQuizQuestionIndex++;
+                updateMiniQuizProgressBar();
+                loadMiniQuizQuestion();
+            } else {
+                showMiniQuizResult();
+            }
+        }, 500);
+    }
+
+    function updateProgressBar() {
+        const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+        progressBarFill.style.width = `${progress}%`;
+    }
+    
+    function updateMiniQuizProgressBar() {
+        const progress = ((currentMiniQuizQuestionIndex + 1) / miniQuizQuestions.length) * 100;
+        miniQuizProgressBarFill.style.width = `${progress}%`;
+    }
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.style.display = 'none';
+        });
+
+        const targetScreen = document.getElementById(screenId);
+        targetScreen.style.display = 'flex';
+
+        if (screenId === 'quiz-screen') {
+            progressBar.style.display = 'block';
+            miniQuizProgressBar.style.display = 'none';
+        } else if (screenId === 'mini-quiz-screen') {
+            progressBar.style.display = 'none';
+            miniQuizProgressBar.style.display = 'block';
+        } else {
+            progressBar.style.display = 'none';
+            miniQuizProgressBar.style.display = 'none';
+        }
+    }
+
+    function startGame() {
+        currentQuestionIndex = 0;
+        scores = {};
+        for(const course of Object.keys(courses)) {
+            scores[course] = 0;
+        }
+        showScreen('quiz-screen');
+        loadQuestion();
+        updateProgressBar();
+    }
+    
+    function startMiniQuiz(courseName) {
+        selectedMiniQuizCourse = courseName;
+        miniQuizQuestions = miniQuizQuestionsData[courseName];
+        currentMiniQuizQuestionIndex = 0;
+        miniQuizScore = 0;
+        showScreen('mini-quiz-screen');
+        loadMiniQuizQuestion();
+        updateMiniQuizProgressBar();
+    }
+
+    function showCourses() {
+        coursesListContainer.innerHTML = '';
+        for (const [name, data] of Object.entries(courses)) {
+            const courseItem = document.createElement('div');
+            courseItem.className = 'course-item';
+            courseItem.innerHTML = `
+                <div class="flex items-center mb-2">
+                    <i class="${data.icon} text-2xl text-[#00a8d4] mr-2"></i>
+                    <h3 class="font-bold text-[#00a8d4]">${name}</h3>
+                </div>
+                <p class="text-sm text-gray-600 mt-1">${data.description}</p>
+                <p class="text-xs text-gray-500 mt-1">Áreas: ${data.areas}</p>
+            `;
+            coursesListContainer.appendChild(courseItem);
+        }
+        showScreen('courses-screen');
+    }
+    
+    function renderClickableQuestion(question, container, advanceFunction) {
+        container.innerHTML = `<div id="options-container" class="options-grid"></div>`;
+        const optionsContainer = container.querySelector('#options-container');
+
+        question.options.forEach((option) => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option.text;
+            button.onclick = () => advanceFunction(option.points, button);
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function renderSentenceCompletionQuestion(question) {
+        const parts = question.question.split('...');
+        const sentenceHTML = `
+            <div class="sentence-container">
+                ${parts[0]}<span class="droppable-placeholder" id="sentence-placeholder"></span>${parts[1]}
+            </div>
+            <div id="options-container" class="options-grid"></div>
+        `;
+        dynamicContent.innerHTML = sentenceHTML;
+        
+        const optionsContainer = document.getElementById('options-container');
+        const placeholder = document.getElementById('sentence-placeholder');
+
+        question.options.forEach((option) => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option.text;
+            button.setAttribute('draggable', 'true');
+            button.dataset.optionId = option.text.replace(/\s+/g, '-').toLowerCase();
+
+            button.addEventListener('dragstart', (e) => {
+                draggedOptionPoints = option.points;
+                e.dataTransfer.setData('text/plain', e.target.textContent);
+                e.target.classList.add('opacity-50');
+            });
+            
+            button.addEventListener('dragend', (e) => {
+                e.target.classList.remove('opacity-50');
+            });
+
+            optionsContainer.appendChild(button);
+        });
+        
+        placeholder.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            placeholder.classList.add('active');
+        });
+
+        placeholder.addEventListener('dragleave', () => {
+            placeholder.classList.remove('active');
+        });
+        
+        placeholder.addEventListener('drop', (e) => {
+            e.preventDefault();
+            placeholder.classList.remove('active');
+            if (draggedOptionPoints) {
+                const droppedText = e.dataTransfer.getData('text/plain');
+                placeholder.textContent = droppedText;
+                placeholder.classList.add('filled');
+                
+                const selectedButton = optionsContainer.querySelector(`[data-option-id='${droppedText.replace(/\s+/g, '-').toLowerCase()}']`);
+                if(selectedButton) {
+                    selectedButton.classList.add('selected');
+                }
+                
+                advanceQuiz(draggedOptionPoints, selectedButton);
+                draggedOptionPoints = null;
+            }
+        });
+    }
+
+    function renderSliderQuestion(question) {
+        questionText.textContent = question.question;
+        dynamicContent.innerHTML = `
+            <div class="slider-container">
+                <input type="range" id="affinity-slider" class="slider" min="${question.min}" max="${question.max}" step="${question.step}" value="${(question.min + question.max) / 2}">
+                <div class="slider-label">
+                    <span>Discordo Totalmente</span>
+                    <span>Concordo Totalmente</span>
+                </div>
+                <div id="slider-value-display" class="slider-value">Valor: ${(question.min + question.max) / 2}</div>
+            </div>
+            <button id="slider-submit-btn" class="submit-btn">Próximo</button>
+        `;
+        
+        const slider = document.getElementById('affinity-slider');
+        const valueDisplay = document.getElementById('slider-value-display');
+        const submitBtn = document.getElementById('slider-submit-btn');
+
+        slider.addEventListener('input', () => {
+            valueDisplay.textContent = `Valor: ${slider.value}`;
+        });
+
+        submitBtn.addEventListener('click', () => {
+            const scoreFactor = slider.value / question.max;
+            const points = {};
+            for (const [course, basePoints] of Object.entries(question.points)) {
+                points[course] = Math.round(basePoints * scoreFactor);
+            }
+            advanceQuiz(points, null);
+        });
+    }
+
+    function renderSortQuestion(question) {
+        questionText.textContent = question.question;
+        dynamicContent.innerHTML = `
+            <div id="sortable-list" class="sortable-list"></div>
+            <button id="sort-submit-btn" class="submit-btn">Concluir Ordem</button>
+        `;
+        
+        const sortableList = document.getElementById('sortable-list');
+        const submitBtn = document.getElementById('sort-submit-btn');
+
+        question.options.forEach((option, index) => {
+            const item = document.createElement('div');
+            item.className = 'sortable-item';
+            item.setAttribute('draggable', 'true');
+            item.dataset.points = JSON.stringify(option.points);
+            item.innerHTML = `<span class="sortable-number">${index + 1}</span><i class="fas fa-grip-lines mr-4"></i><span>${option.text}</span>`;
+            sortableList.appendChild(item);
+        });
+
+        let draggingItem = null;
+
+        const updateSortNumbers = () => {
+            const items = [...sortableList.children];
+            items.forEach((item, index) => {
+                item.querySelector('.sortable-number').textContent = index + 1;
+            });
+        };
+
+        sortableList.addEventListener('dragstart', (e) => {
+            draggingItem = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', e.target.textContent);
+        });
+
+        sortableList.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(sortableList, e.clientY);
+            const currentItem = document.querySelector('.dragging');
+            if (afterElement == null) {
+                sortableList.appendChild(currentItem);
+            } else {
+                sortableList.insertBefore(currentItem, afterElement);
+            }
+        });
+
+        sortableList.addEventListener('dragend', (e) => {
+            e.target.classList.remove('dragging');
+            updateSortNumbers();
+        });
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.sortable-item:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const orderedItems = [...sortableList.children];
+            const sortedPoints = {};
+
+            orderedItems.forEach((item, index) => {
+                const itemPoints = JSON.parse(item.dataset.points);
+                // A ordem correta está implícita na ordem do array original de `questions.options`
+                // Vamos simplificar o scoring: o 1º item ganha mais, o 2º ganha um pouco menos, etc.
+                const scoreMultiplier = (question.options.length - index) / question.options.length;
+                for (const [course, basePoints] of Object.entries(itemPoints)) {
+                    sortedPoints[course] = (sortedPoints[course] || 0) + Math.round(basePoints * scoreMultiplier);
+                }
+            });
+            advanceQuiz(sortedPoints, submitBtn);
+        });
+    }
+
+    function loadQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            showResult();
+            return;
+        }
+        
+        const question = questions[currentQuestionIndex];
+        document.getElementById('question-card').className = `main-container question-card ${questionColors[currentQuestionIndex % questionColors.length]}`;
+        questionText.textContent = question.question;
+
+        switch(question.type) {
+            case 'click':
+                renderClickableQuestion(question, dynamicContent, advanceQuiz);
+                break;
+            case 'sentence-completion':
+                renderSentenceCompletionQuestion(question);
+                break;
+            case 'slider':
+                renderSliderQuestion(question);
+                break;
+            case 'sort':
+                renderSortQuestion(question);
+                break;
+        }
+    }
+    
+    function loadMiniQuizQuestion() {
+        if (currentMiniQuizQuestionIndex >= miniQuizQuestions.length) {
+            showMiniQuizResult();
+            return;
+        }
+        
+        const question = miniQuizQuestions[currentMiniQuizQuestionIndex];
+        document.getElementById('mini-quiz-card').className = `main-container question-card ${questionColors[currentMiniQuizQuestionIndex % questionColors.length]}`;
+        miniQuizQuestionText.textContent = question.question;
+        
+        renderClickableQuestion(question, miniQuizDynamicContent, advanceMiniQuiz);
+    }
+    
+    function showMiniQuizResult() {
+        const totalPossibleScore = miniQuizQuestions.reduce((sum, q) => sum + Math.max(...q.options.map(o => o.points)), 0);
+        const percentage = totalPossibleScore > 0 ? (miniQuizScore / totalPossibleScore) * 100 : 0;
+        
+        miniQuizResultText.textContent = `Sua afinidade com o curso de ${selectedMiniQuizCourse} é de:`;
+        miniQuizPercentage.textContent = `${Math.round(percentage)}%`;
+        
+        if (miniQuizChartInstance) {
+            miniQuizChartInstance.destroy();
+        }
+        
+        const ctx = document.getElementById('miniQuizChart').getContext('2d');
+        miniQuizChartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Afinidade', 'Faltando'],
+                datasets: [{
+                    data: [percentage, 100 - percentage],
+                    backgroundColor: ['#00a8d4', '#e2e8f0'],
+                    hoverBackgroundColor: ['#00a8d4', '#e2e8f0'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '80%',
+                plugins: {
+                    tooltip: {
+                        enabled: false
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        miniQuizResultModal.style.display = 'flex';
+    }
+
+    function showResult() {
+        let maxScore = -1;
+        let recommendedCourse = '';
+        let totalScore = 0;
+        const courseAffinities = {};
+
+        for (const [course, score] of Object.entries(scores)) {
+            if (score > maxScore) {
+                maxScore = score;
+                recommendedCourse = course;
+            }
+            totalScore += score;
+        }
+
+        for (const [course, score] of Object.entries(scores)) {
+             courseAffinities[course] = totalScore > 0 ? (score / totalScore) * 100 : 0;
+        }
+
+        document.getElementById('result-course').textContent = recommendedCourse;
+        const courseIconElement = document.getElementById('course-icon-in-title');
+        courseIconElement.className = `${courses[recommendedCourse].icon} course-icon-in-title`;
+        document.getElementById('course-description').innerHTML = `
+            <p class="font-bold text-gray-600 text-lg">Sobre o curso:</p>
+            <p class="text-base text-gray-500 mt-2">${courses[recommendedCourse].description}</p>
+            <p class="font-bold text-gray-600 text-lg mt-4">Possíveis áreas de atuação:</p>
+            <p class="text-base text-gray-500 mt-2">${courses[recommendedCourse].areas}</p>
+        `;
+        
+        renderAffinityChart(courseAffinities);
+        showScreen('result-screen');
+    }
+
+    function renderAffinityChart(data) {
+        if (affinityChartInstance) {
+            affinityChartInstance.destroy();
+        }
+
+        const ctx = document.getElementById('affinityChart').getContext('2d');
+        const chartLabels = Object.keys(data);
+        const chartData = Object.values(data);
+        
+        const backgroundColors = [
+            '#00a8d4', '#9cbb17', '#fae41e', '#fc803f', '#ee4035',
+            '#00a8d4', '#9cbb17', '#fae41e', '#fc803f', '#ee4035'
+        ];
+        
+        affinityChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Afinidade (%)',
+                    data: chartData,
+                    backgroundColor: backgroundColors,
+                    borderColor: backgroundColors,
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+    
+    function showChooseCourseScreen() {
+        chooseCourseGrid.innerHTML = '';
+        for (const [name, data] of Object.entries(courses)) {
+            const courseItem = document.createElement('div');
+            courseItem.className = 'choose-course-item';
+            courseItem.innerHTML = `
+                <i class="${data.icon} text-4xl text-[#00a8d4] mb-2"></i>
+                <h3 class="font-bold text-gray-700">${name}</h3>
+            `;
+            courseItem.onclick = () => startMiniQuiz(name);
+            chooseCourseGrid.appendChild(courseItem);
+        }
+        showScreen('choose-course-screen');
+    }
+
+    startButton.addEventListener('click', () => {
+        tutorialModal.style.display = 'flex';
+    });
+    
+    closeModalBtn.addEventListener('click', () => {
+        tutorialModal.style.display = 'none';
+    });
+
+    startQuizFromModalBtn.addEventListener('click', () => {
+        tutorialModal.style.display = 'none';
+        startGame();
+    });
+
+    showCoursesButton.addEventListener('click', showCourses);
+    startMiniQuizButton.addEventListener('click', showChooseCourseScreen);
+    
+    backButtonIconCourses.addEventListener('click', () => showScreen('start-screen'));
+    backButtonIconChoose.addEventListener('click', () => showScreen('start-screen'));
+    backButtonIconMiniQuiz.addEventListener('click', () => showScreen('choose-course-screen'));
+    
+    restartButton.addEventListener('click', () => showScreen('start-screen'));
+    restartMiniQuizBtn.addEventListener('click', () => {
+        miniQuizResultModal.style.display = 'none';
+        showChooseCourseScreen();
+    });
+
+    audioButton.addEventListener('click', () => {
+        if (backgroundAudio.paused) {
+            backgroundAudio.play();
+            audioButton.className = 'fas fa-volume-up audio-button';
+        } else {
+            backgroundAudio.pause();
+            audioButton.className = 'fas fa-volume-mute audio-button';
+        }
+    });
+    
+    window.addEventListener('load', () => {
+        backgroundAudio.play().catch(error => {
+            console.error("Autoplay foi bloqueado. Por favor, clique no botão de áudio para iniciar a música.", error);
+        });
+    });
+
+    showScreen('start-screen');
+</script>
+</body>
+</html>
