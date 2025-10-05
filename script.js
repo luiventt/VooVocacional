@@ -199,7 +199,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 { text: "Charmander: explorador e organizado.", points: { 'Administração': 3, 'Comércio Exterior': 2 } },
                 { text: "Pikachu: animado e criativo.", points: { 'Informática para Internet': 3, 'Marketing': 2 } },
                 { text: "Squirtle: protetor e organizado.", points: { 'Serviços Jurídicos': 3, 'Segurança do Trabalho': 2 } },
-                { text: "Bulbassaur: calmo e companheiro,", points: { 'Recursos Humanos': 3, 'Cuidados de Idosos': 2 } }
+                { text: "Bulbassaur: calmo e companheiro.", points: { 'Recursos Humanos': 3, 'Cuidados de Idosos': 2 } }
             ]
         },
         {
@@ -227,7 +227,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         },
         {
             type: 'click',
-            question: "Você recebe um **presente surpresa**. Sua reação é:",
+            question: "Qual gênero de filme mais condiz com sua personalidade?",
             options: [
                 { text: "Ficção Científica: Seu foco é achar a fonte do problema para reprogramá-la e criar uma nova realidade tecnológica.", points: { 'Informática para Internet': 3, 'Recursos Humanos': 2 } },
                 { text: "Suspense: Seu foco é estar sempre um passo à frente com planos secretos de alto risco para atingir o objetivo a qualquer custo", points: { 'Comércio Exterior': 3, 'Administração': 2 } },
@@ -685,6 +685,48 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     // Funcionalidades de navegação
     
+    // ******************************************************
+    // 4. FLUXO MINI-QUIZ (CORREÇÃO DO BOTÃO "COMPATIBILIDADE")
+    // ******************************************************
+    if (startMiniQuizButton) {
+        startMiniQuizButton.addEventListener('click', () => {
+            // 1. Renderiza os botões de curso
+            renderChooseCourseGrid(); 
+            // 2. Troca para a tela de escolha
+            showScreen('choose-course-screen');
+        });
+    }
+
+    // Voltar da tela de seleção de curso para a inicial
+    if (backButtonIconChoose) {
+        backButtonIconChoose.addEventListener('click', () => {
+            showScreen('start-screen');
+        });
+    }
+
+    // Voltar do mini-quiz (perguntas) para a tela de seleção de curso
+    if (backButtonIconMiniQuiz) {
+        backButtonIconMiniQuiz.addEventListener('click', () => {
+            showScreen('choose-course-screen');
+        });
+    }
+    // ******************************************************
+    // 5. FLUXO MINI-QUIZ (AGORA VOLTANDO PARA A TELA INICIAL)
+    // ******************************************************
+    if (restartMiniQuizBtn) {
+        restartMiniQuizBtn.addEventListener('click', () => {
+            // 1. Esconde o Modal de Resultado
+            miniQuizResultModal.style.display = 'none';
+
+            // 2. Garante que a barra de progresso do Mini-Quiz esteja oculta
+            miniQuizProgressBar.style.display = 'none';
+
+            // 3. Volta AGORA para a TELA INICIAL (start-screen)
+            showScreen('start-screen');
+        });
+    }
+
+    // ... (O restante do seu código continua aqui) ...
     // 1. Fluxo Principal: Botão Inicial -> Formulário
     startButton.addEventListener('click', () => {
         showScreen('data-form-screen'); 

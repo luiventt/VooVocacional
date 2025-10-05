@@ -85,18 +85,6 @@ body {
     align-items: center;
     flex-direction: column;
 }
-/* AJUSTE: Classes de jogos (.memory-game-section, .rock-paper-scissors-section, .tictactoe-section) removidas */
-.quiz-section, .courses-section, .choose-course-section, .mini-quiz-section { 
-    display: none;
-    height: 95%;
-}
-.question-card {
-    background-color: rgba(255, 255, 255, 0.98);
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    text-align: left;
-}
 .options-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -255,7 +243,7 @@ body {
     margin-bottom: 1.5rem;
 }
 .course-icon-in-title {
-    font-size: 3rem;
+    font-size: 10rem;
     color: #00a8d4;
     margin-right: 1rem;
 }
@@ -264,19 +252,6 @@ body {
     font-weight: 700;
     color: #00a8d4;
     text-align: center;
-}
-.audio-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.5rem;
-    color: #00a8d4;
-    cursor: pointer;
-    transition: transform 0.3s;
-    z-index: 1000;
-}
-.audio-button:hover {
-    transform: scale(1.2);
 }
 .character-name {
     font-weight: 700;
@@ -332,4 +307,3 @@ body {
     cursor: pointer;
     color: #4a5568;
 }
-/* AJUSTE: Removido Estilos do Memory Game, Jokenpô e Jogo da Velha */
