@@ -660,6 +660,29 @@
         </div>
     </div>
     
+    <div id="data-form-screen" class="screen flex-col items-center p-6" style="display: none;">
+        <div class="main-container">
+            <h2 class="text-2xl font-bold mb-4 text-gray-700">1. Preencha seus Dados</h2>
+            <p class="text-lg mb-6 text-gray-500">
+                Responda ao formulário abaixo para iniciarmos o teste!
+            </p>
+            
+            <div class="mb-6">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc4SGr4KHxY5Ae7BK22cmvfV662Mqgq515G_cxzkwidXcqrww/viewform?embedded=true" width="640" height="278" frameborder="0" marginheight="0" marginwidth="0">Carregando…</iframe>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <div class="mb-6 flex items-center justify-center">
+                    <input type="checkbox" id="form-confirmation-checkbox" class="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 mr-2">
+                    <label for="form-confirmation-checkbox" class="text-base font-medium text-gray-700">Eu confirmo que respondi e enviei o formulário acima.</label>
+                </div>
+                
+                <button id="form-submit-next-button" class="start-btn bg-green-500 opacity-50 cursor-not-allowed" disabled>
+                    Avançar para o Quiz <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+            </div>
+    </div>
     <div id="choose-course-screen" class="screen choose-course-section">
         <div class="content-wrapper">
             <i id="back-button-icon-choose" class="fas fa-arrow-left back-button-icon"></i>
@@ -683,55 +706,55 @@
                 </div>
         </div>
     </div>
-
-    <div id="memory-game-screen" class="screen memory-game-section">
-        <i id="back-button-icon-memory" class="fas fa-arrow-left back-button-icon"></i>
+    
+    <div id="button-tap-game-screen" class="screen" style="display: none;">
         <div class="main-container">
-            <h2 class="text-3xl font-bold mb-4 text-gray-700">Jogo da Memória</h2>
-            <p class="text-md mb-8 text-gray-500">
-                Encontre os pares para desbloquear a próxima fase!
-            </p>
-            <div id="memory-game-grid" class="memory-game-grid"></div>
+            <h2 class="text-3xl font-bold mb-4 text-gray-700">Bata no Botão Certo!</h2>
+            <p id="tap-game-timer" class="text-xl font-mono text-red-500 mb-4"></p>
+            <p id="tap-game-instruction" class="text-lg mb-6 text-gray-600 font-semibold"></p>
+            
+            <div id="target-color-display" class="text-6xl font-extrabold mb-8 transition-colors duration-200">
+                </div>
+            
+            <div id="color-button-grid" class="options-grid w-full max-w-sm mx-auto">
+                </div>
         </div>
     </div>
 
-    <div id="rock-paper-scissors-screen" class="screen rock-paper-scissors-section">
-        <i id="back-button-icon-jokenpo" class="fas fa-arrow-left back-button-icon"></i>
+    <div id="sorter-game-screen" class="screen" style="display: none;">
         <div class="main-container">
-            <h2 class="text-3xl font-bold mb-4 text-gray-700">Pedra, Papel e Tesoura</h2>
-            <p class="text-md mb-4 text-gray-500">
-                Vença o computador 1 vez para continuar o quiz!
-            </p>
-            <div class="jokenpo-options">
-                <button id="jokenpo-rock" class="jokenpo-btn">&#x1F44A;</button>
-                <button id="jokenpo-paper" class="jokenpo-btn">&#x1F590;</button>
-                <button id="jokenpo-scissors" class="jokenpo-btn">&#x270C;</button>
-            </div>
-            <p id="jokenpo-result" class="jokenpo-result"></p>
-            <p id="jokenpo-score" class="mt-4 font-semibold text-lg"></p>
+            <h2 class="text-3xl font-bold mb-4 text-gray-700">O Ordenador</h2>
+            <p id="sorter-game-instruction" class="text-lg mb-6 text-gray-600 font-semibold">Arraste os itens para a ordem correta.</p>
+            
+            <div id="sorter-game-list" class="sortable-list w-full max-w-sm mx-auto">
+                </div>
+            
+            <button id="sorter-game-submit" class="start-btn mt-6">
+                Conferir Ordem <i class="fas fa-check ml-2"></i>
+            </button>
         </div>
     </div>
 
-    <div id="tictactoe-screen" class="screen tictactoe-section">
-        <i id="back-button-icon-tictactoe" class="fas fa-arrow-left back-button-icon"></i>
+    <div id="tictactoe-game-screen" class="screen" style="display: none;">
         <div class="main-container">
             <h2 class="text-3xl font-bold mb-4 text-gray-700">Jogo da Velha</h2>
-            <p class="text-md mb-4 text-gray-500">
-                Vença a Fatec para desbloquear a próxima pergunta!
-            </p>
-            <div id="tictactoe-grid" class="tictactoe-grid">
-                <div class="tictactoe-cell" data-cell-index="0"></div>
-                <div class="tictactoe-cell" data-cell-index="1"></div>
-                <div class="tictactoe-cell" data-cell-index="2"></div>
-                <div class="tictactoe-cell" data-cell-index="3"></div>
-                <div class="tictactoe-cell" data-cell-index="4"></div>
-                <div class="tictactoe-cell" data-cell-index="5"></div>
-                <div class="tictactoe-cell" data-cell-index="6"></div>
-                <div class="tictactoe-cell" data-cell-index="7"></div>
-                <div class="tictactoe-cell" data-cell-index="8"></div>
-            </div>
-            <p id="tictactoe-status" class="tictactoe-status"></p>
-            <button id="tictactoe-restart" class="submit-btn mt-4 hidden">Recomeçar</button>
+            <p id="tictactoe-message" class="text-xl mb-4 font-semibold text-gray-600">Sua vez (X)!</p>
+            
+            <div id="tictactoe-board" class="tictactoe-board">
+                </div>
+
+            <p class="text-sm mt-4 text-gray-500">Você joga contra a IA. Se vencer, ganha bônus!</p>
+        </div>
+    </div>
+
+    <div id="maze-game-screen" class="screen" style="display: none;">
+        <div class="main-container">
+            <h2 class="text-3xl font-bold mb-4 text-gray-700">Labirinto de um Toque</h2>
+            <p id="maze-message" class="text-lg mb-6 text-gray-600 font-semibold">Comece no Verde, termine no Vermelho.</p>
+            
+            <canvas id="maze-canvas" class="border-2 border-gray-400 rounded-lg w-full max-w-sm mx-auto touch-none" style="display: block;"></canvas>
+
+            <p class="text-sm mt-4 text-gray-500">Não tire o dedo (ou mouse) da tela!</p>
         </div>
     </div>
 
