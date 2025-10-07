@@ -891,7 +891,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Inicialização do Quiz
     showScreen('start-screen');
 
-}); // Fim do DOMContentLoaded
+});
+ // Fim do DOMContentLoaded
 // O código será executado somente depois que o HTML estiver totalmente carregado
 window.addEventListener('DOMContentLoaded', (event) => {
 
@@ -1011,6 +1012,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         });
     }
     
+    
     // =================================================================
     // FIM DA LÓGICA DE FLUXO E INÍCIO DE SUAS FUNÇÕES DE QUIZ, ETC.
     // =================================================================
@@ -1020,4 +1022,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Inicialização do fluxo (pode ser necessário manter esta linha)
     showScreen('start-screen');
 
-}); // Fim do DOMContentLoaded
+});
+ // Fim do DOMContentLoaded
